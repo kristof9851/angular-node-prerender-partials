@@ -1,0 +1,70 @@
+<html ng-app="my">
+    <base href="/">
+    <style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+/* The starting CSS styles for the enter animation */
+.fade.ng-enter {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+/* The finishing CSS styles for the enter animation */
+.fade.ng-enter.ng-enter-active {
+  opacity:1;
+}
+    </style>
+    <body>
+
+        <h1>Main page</h1>
+
+        <div>
+            <a href="/tab1">Tab1</a>
+            <a href="/tab2">Tab2</a>
+        </div>
+
+        <div ng-view ng-cloak class="fade">
+            <% if (locals.tab1) { %>
+                <%- include('tab1', {tab1: tab1}); %>
+            <% } else if (locals.tab2) { %>
+                <%- include('tab2', {tab2: tab2}); %>
+            <% } %>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-animate.min.js"></script>
+        <script>
+        'use strict';
+        var app = angular.module('my', ['ngRoute', 'ngAnimate']);
+        app.controller('Tab1Controller', ['$scope', function($scope){
+            $scope.tab1 = {
+                title: 'tab1 titleeee',
+                name: 'tab1 nameee'
+            };
+        }]);
+        app.controller('Tab2Controller', ['$scope', function($scope){
+            $scope.tab2 = {
+                title: 'tab2 titleeee',
+                name: 'tab2 nameee'
+            };
+        }]);
+        app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+            $locationProvider.html5Mode(true);
+            $routeProvider
+                .when('/tab1', {
+                    templateUrl: 'tab1',
+                    controller: 'Tab1Controller'
+                })
+                .when('/tab2', {
+                    templateUrl: 'tab2',
+                    controller: 'Tab2Controller'
+                })
+                .otherwise({
+                    redirectTo: '/tab1'
+                });
+        }]);
+        </script>
+    </body>
+</html>
